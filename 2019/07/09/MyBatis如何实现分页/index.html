@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019 | 小天的博客</title>
+  <title>MyBatis如何实现分页 | 小天的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="小天的博客">
-<meta property="og:url" content="http://yoursite.com/archives/2019/index.html">
+  <meta name="description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis如何实现分页">
+<meta property="og:url" content="http://yoursite.com/2019/07/09/MyBatis如何实现分页/index.html">
 <meta property="og:site_name" content="小天的博客">
+<meta property="og:description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-09T12:53:46.435Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="小天的博客">
+<meta name="twitter:title" content="MyBatis如何实现分页">
+<meta name="twitter:description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
   
     <link rel="alternative" href="/atom.xml" title="小天的博客" type="application/atom+xml">
   
@@ -146,87 +150,147 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-MyBatis如何实现分页" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      MyBatis如何实现分页
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/09/MyBatis如何实现分页/" class="archive-article-date">
+
+        
+        <a href="/2019/07/09/MyBatis如何实现分页/" class="archive-article-date">
   	<time datetime="2019-07-09T12:30:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-09</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/09/MyBatis如何实现分页/">MyBatis如何实现分页</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="MyBatis四种分页方式"><a href="#MyBatis四种分页方式" class="headerlink" title="MyBatis四种分页方式"></a><font color="#00ffff">MyBatis四种分页方式</font></h2><h2 id="数据分页"><a href="#数据分页" class="headerlink" title="数据分页"></a>数据分页</h2><p>查询出全部数据，然后再list中截取需要的部分。<br>mybatis接口<br><code>List&lt;Student&gt; queryStudentsByArray();</code><br>xml配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;queryStudentsByArray&quot;  resultMap=&quot;studentmapper&quot;&gt;</span><br><span class="line">       select * from student</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
-          
+<p>service</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">接口</span><br><span class="line">List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize);</span><br><span class="line">实现接口</span><br><span class="line"> @Override</span><br><span class="line">    public List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize) &#123;</span><br><span class="line">        //查询全部数据</span><br><span class="line">        List&lt;Student&gt; students = studentMapper.queryStudentsByArray();</span><br><span class="line">        //从第几条数据开始</span><br><span class="line">        int firstIndex = (currPage - 1) * pageSize;</span><br><span class="line">        //到第几条数据结束</span><br><span class="line">        int lastIndex = currPage * pageSize;</span><br><span class="line">        return students.subList(firstIndex, lastIndex); //直接在list中截取</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
+<p>controller</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@ResponseBody</span><br><span class="line">    @RequestMapping(&quot;/student/array/&#123;currPage&#125;/&#123;pageSize&#125;&quot;)</span><br><span class="line">    public List&lt;Student&gt; getStudentByArray(@PathVariable(&quot;currPage&quot;) int currPage, @PathVariable(&quot;pageSize&quot;) int pageSize) &#123;</span><br><span class="line">        List&lt;Student&gt; student = StuServiceIml.queryStudentsByArray(currPage, pageSize);</span><br><span class="line">        return student;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="sql分页"><a href="#sql分页" class="headerlink" title="sql分页"></a>sql分页</h2><p>通过SQL语句带入响应的分页条件进行分页</p>
+<h2 id="拦截器分页"><a href="#拦截器分页" class="headerlink" title="拦截器分页"></a>拦截器分页</h2><p>创建拦截器，拦截mybatis接口方法id以ByPage结束的语句</p>
+<h2 id="RowBounds分页"><a href="#RowBounds分页" class="headerlink" title="RowBounds分页"></a>RowBounds分页</h2><p>数据量小时，RowBounds不失为一种好办法。但是数据量大时，实现拦截器就很有必要了。mybatis接口加入RowBounds参数</p>
+<p>详细请见—&gt;<a href="https://www.cnblogs.com/aeolian/p/9229149.html" target="_blank" rel="noopener">mybatis的四种分页</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/07/09/MyBatis如何实现分页/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/07/09/SSM框架工作原理/" class="archive-article-date">
-  	<time datetime="2019-07-09T08:03:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-09</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/09/SSM框架工作原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">SSM框架工作原理及执行流程</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/07/09/SSM框架工作原理/">SSM框架工作原理及执行流程</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">原理及流程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -249,8 +313,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

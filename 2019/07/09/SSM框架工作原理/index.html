@@ -17,7 +17,7 @@
 <meta property="og:description" content="1.SSM框架工作原理 (1) Spring:&amp;emsp;&amp;emsp;平时开发接触最多的估计就是IOC容器，它可以装载bean(也就是Java中的类，当然也包括service dao里面的) ,有了这个机制，就不用在每次使用这个类的时候为他初始化，很少看到关键字new，Spring的AOP，事务管理等等。(2) SpringMVC:&amp;emsp;&amp;emsp;1) 客户端发送请求到DispacherS">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://img.xianjichina.com/editer/20181105/image/0756d2b472814a035a185408f0da9fcc.png">
-<meta property="og:updated_time" content="2019-07-09T12:25:00.367Z">
+<meta property="og:updated_time" content="2019-07-09T12:32:48.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SSM框架工作原理及执行流程">
 <meta name="twitter:description" content="1.SSM框架工作原理 (1) Spring:&amp;emsp;&amp;emsp;平时开发接触最多的估计就是IOC容器，它可以装载bean(也就是Java中的类，当然也包括service dao里面的) ,有了这个机制，就不用在每次使用这个类的时候为他初始化，很少看到关键字new，Spring的AOP，事务管理等等。(2) SpringMVC:&amp;emsp;&amp;emsp;1) 客户端发送请求到DispacherS">
@@ -175,7 +175,8 @@
       
         <p><strong>1.SSM框架工作原理</strong></p>
 <p>(1) Spring:<br>&emsp;&emsp;平时开发接触最多的估计就是IOC容器，它可以装载bean(也就是Java中的类，当然也包括service dao里面的) ,有了这个机制，就不用在每次使用这个类的时候为他初始化，很少看到关键字new，Spring的AOP，事务管理等等。<br>(2) SpringMVC:<br>&emsp;&emsp;1) 客户端发送请求到DispacherServlet(分发器);<br>&emsp;&emsp;2) 由DispacherServlet控制器查询HanderMapping，找到处理请求的Controller;<br>&emsp;&emsp;3) Controller调用业务逻辑处理后，返回ModelAndView;<br>&emsp;&emsp;4) DispacherServlet查询视图解析器，找到ModelAndView指定的视图;<br>&emsp;&emsp;5) 视图负责将结果显示到客户端。<br>(3) MyBatis:<br>&emsp;&emsp;mybatis是对jdbc的封装，它让数据库底层操作变得透明，mybatis的操作都是围绕一个sqlSessionFactory实例展开的，mybatis通过配置文件关联到各实体类的Mapper文件，Maooer文件中配置了每个类对数据库所需进行的sql语句映射，在每次与数据库交互时，通过sqlSessionFactory拿到一个sqlSession，再执行sql命令。</p>
-<p><strong>2.SSM框架执行流程</strong><br><img src="https://img.xianjichina.com/editer/20181105/image/0756d2b472814a035a185408f0da9fcc.png" alt="执行流程"></p>
+<p><strong>2.SSM框架执行流程</strong></p>
+<p><img src="https://img.xianjichina.com/editer/20181105/image/0756d2b472814a035a185408f0da9fcc.png" alt="执行流程"></p>
 
       
 
@@ -257,6 +258,20 @@
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/2019/07/09/MyBatis如何实现分页/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MyBatis如何实现分页
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
