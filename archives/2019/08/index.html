@@ -6,11 +6,11 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>小天的博客</title>
+  <title>Archives: 2019/8 | 小天的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="小天的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/archives/2019/08/index.html">
 <meta property="og:site_name" content="小天的博客">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -148,252 +148,47 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-角色权限管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/08/03/角色权限管理/">角色权限管理</a>
-    </h1>
-  
-
-        
-        <a href="/2019/08/03/角色权限管理/" class="archive-article-date">
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/08/03/角色权限管理/" class="archive-article-date">
   	<time datetime="2019-08-03T08:30:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-03</time>
 </a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="角色权限"><a href="#角色权限" class="headerlink" title="角色权限"></a>角色权限</h1><hr>
-<p>一个角色对应多个权限、一个权限对应多个角色</p>
-<h2 id="首先是表关系"><a href="#首先是表关系" class="headerlink" title="首先是表关系"></a>首先是表关系</h2><p>角色表(Role)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">private String roleid;</span><br><span class="line">private String rolename;</span><br><span class="line">private String state;</span><br><span class="line">private Set&lt;RolePrivilege&gt; rolePrivileges;</span><br></pre></td></tr></table></figure>
-
-<p>实现get、set、有参、无参、方法、实现序列化接口</p>
-<p>角色关联(RolePrivilege)<br><code>private RolePrivilegeId id;</code></p>
-<p>同上实现相应的方法、该关联表貌似并没有什么用、我觉得应该可以直接写为Set<roleprivilegeid></roleprivilegeid></p>
-<p>角色和权限的中间表(RolePrivilegeId)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private Role role;</span><br><span class="line">private String code;</span><br></pre></td></tr></table></figure>
-
-<p>除了要实现以上方法外、联合主键：实现Serializable 、重写 hashCode, equals方法</p>
-<p>权限表(Privilege)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static String PRIVILEGE_XZGL = &quot;xzgl&quot;; </span><br><span class="line">public static String PRIVILEGE_HQFW = &quot;hqfw&quot;; </span><br><span class="line">public static String PRIVILEGE_ZXXX = &quot;zxxx&quot;; </span><br><span class="line">public static String PRIVILEGE_NSFW = &quot;nsfw&quot;; </span><br><span class="line">public static String PRIVILEGE_SPACE = &quot;spaces&quot;; </span><br><span class="line"></span><br><span class="line">public static Map&lt;String, String&gt; PRIVILEGE_MAP;</span><br><span class="line">static &#123;</span><br><span class="line">	PRIVILEGE_MAP = new HashMap&lt;String, String&gt;();</span><br><span class="line">	PRIVILEGE_MAP.put(PRIVILEGE_XZGL, &quot;行政管理&quot;);</span><br><span class="line">	PRIVILEGE_MAP.put(PRIVILEGE_HQFW, &quot;后勤服务&quot;);</span><br><span class="line">	PRIVILEGE_MAP.put(PRIVILEGE_ZXXX, &quot;在线学习&quot;);</span><br><span class="line">	PRIVILEGE_MAP.put(PRIVILEGE_NSFW, &quot;纳税服务&quot;);</span><br><span class="line">	PRIVILEGE_MAP.put(PRIVILEGE_SPACE, &quot;我的空间&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>该权限名称表是一个实体类</p>
-<hr>
-<h2 id="后台查询所有角色信息"><a href="#后台查询所有角色信息" class="headerlink" title="后台查询所有角色信息"></a>后台查询所有角色信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 列表页面</span><br><span class="line">@RequestMapping(&quot;/role/listUI&quot;)</span><br><span class="line">public String listUI(Model model) &#123;</span><br><span class="line">	//查询所有角色信息</span><br><span class="line">	List&lt;Role&gt; lists = roleServiceImpl.findObjects();</span><br><span class="line">	</span><br><span class="line">	for (Role role : lists) &#123;</span><br><span class="line">		//获取角色Id</span><br><span class="line">		String id = role.getroleid();</span><br><span class="line">		//根据角色Id查询出对应的  权限名称</span><br><span class="line">		List&lt;RolePrivilegeId&gt; strs = roleServiceImpl.getRolePrivByRoleId(id);</span><br><span class="line">		//new 一个 Set 用于保存 权限角色名称</span><br><span class="line">		Set&lt;RolePrivilege&gt; set = new HashSet&lt;RolePrivilege&gt;();</span><br><span class="line">		</span><br><span class="line">		if(strs != null)&#123;</span><br><span class="line">			//循环查询出来的 权限角色名称</span><br><span class="line">			for (RolePrivilegeId rolePrivilegeId : strs) &#123;</span><br><span class="line">				//保存到Set中去</span><br><span class="line">				set.add(new RolePrivilege(new RolePrivilegeId(role, rolePrivilegeId.getCode())));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		//添加到Role对象</span><br><span class="line">		role.setRolePrivileges(set);</span><br><span class="line">	&#125;	</span><br><span class="line">	//角色集合</span><br><span class="line">	model.addAttribute(&quot;RoleList&quot;, lists);</span><br><span class="line">	//权限集合</span><br><span class="line">	model.addAttribute(&quot;privilegeMap&quot;,Privilege.PRIVILEGE_MAP);</span><br></pre></td></tr></table></figure>
-
-<p>不仅仅是查询出所有角色、还要查询出所有角色所对应的权限</p>
-<h2 id="前段显示"><a href="#前段显示" class="headerlink" title="前段显示"></a>前段显示</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;table width=&quot;100%&quot; border=&quot;0&quot;&gt;</span><br><span class="line">	&lt;tr class=&quot;t_tit&quot;&gt;</span><br><span class="line">		&lt;td width=&quot;30&quot; align=&quot;center&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;selAll&quot; onclick=&quot;doSelectAll()&quot; /&gt;&lt;/td&gt;</span><br><span class="line">		&lt;td width=&quot;120&quot; align=&quot;center&quot;&gt;角色名称&lt;/td&gt;</span><br><span class="line">		&lt;td align=&quot;center&quot;&gt;权限&lt;/td&gt;</span><br><span class="line">		&lt;td width=&quot;80&quot; align=&quot;center&quot;&gt;状态&lt;/td&gt;</span><br><span class="line">		&lt;td width=&quot;120&quot; align=&quot;center&quot;&gt;操作&lt;/td&gt;</span><br><span class="line">	&lt;/tr&gt;</span><br><span class="line">	&lt;!-- 循环角色集合 --&gt;</span><br><span class="line">	&lt;c:forEach items=&quot;$&#123;RoleList&#125;&quot; var=&quot;role&quot;&gt;</span><br><span class="line">		&lt;tr&gt;</span><br><span class="line">			&lt;td align=&quot;center&quot;&gt;&lt;input type=&quot;checkbox&quot; name=&quot;selectedRow&quot; value=&quot;&lt;s:property value=&apos;$&#123;role.roleid&#125;&apos;/&gt;&quot;/&gt;&lt;/td&gt;</span><br><span class="line">			&lt;td align=&quot;center&quot;&gt;$&#123;role.rolename &#125;&lt;/td&gt;</span><br><span class="line">			&lt;td align=&quot;center&quot;&gt;</span><br><span class="line">				&lt;!-- 循环权限名称集合 --&gt;</span><br><span class="line">				&lt;c:forEach items=&quot;$&#123;privilegeMap&#125;&quot; var=&quot;priv&quot;&gt;</span><br><span class="line">				&lt;!-- 循环权限名称集合 --&gt;</span><br><span class="line">				&lt;c:forEach items=&quot;$&#123;role.rolePrivileges&#125;&quot; var=&quot;roleprivi&quot;&gt;</span><br><span class="line">				&lt;c:if test=&quot;$&#123;roleprivi.id.code eq priv.key&#125;&quot;&gt;</span><br><span class="line">					$&#123;priv.value &#125;</span><br><span class="line">				&lt;/c:if&gt;</span><br><span class="line">				&lt;/c:forEach&gt;</span><br><span class="line">				&lt;/c:forEach&gt;</span><br><span class="line">				&lt;/td&gt;</span><br><span class="line">			&lt;td align=&quot;center&quot;&gt;$&#123;role.state==1?&apos;有效&apos;:&apos;无效&apos;&#125;&lt;/td&gt;</span><br><span class="line">			&lt;td align=&quot;center&quot;&gt;</span><br><span class="line">			&lt;a href=&quot;javascript:doEdit(&apos;$&#123;role.roleid&#125;&apos;)&quot;&gt;编辑&lt;/a&gt;</span><br><span class="line">			&lt;a href=&quot;javascript:doDelete(&apos;$&#123;role.roleid&#125;&apos;)&quot;&gt;删除&lt;/a&gt;</span><br><span class="line">			&lt;/td&gt;</span><br><span class="line">		&lt;/tr&gt;</span><br><span class="line">	&lt;/c:forEach&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="角色添加"><a href="#角色添加" class="headerlink" title="角色添加"></a>角色添加</h2><p>跳转添加页面时、将权限集合保存到model里去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 跳转到新增页面</span><br><span class="line">@RequestMapping(&quot;/role/addUI&quot;)</span><br><span class="line">public String addUI(Model model) &#123;</span><br><span class="line">	model.addAttribute(&quot;privilegeMap&quot;,Constant.PRIVILEGE_MAP);</span><br><span class="line">	return &quot;addUI&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="前段页面"><a href="#前段页面" class="headerlink" title="前段页面"></a>前段页面</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;table id=&quot;baseInfo&quot; width=&quot;100%&quot; align=&quot;center&quot; class=&quot;list&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;  &gt;</span><br><span class="line">       &lt;tr&gt;</span><br><span class="line">           &lt;td class=&quot;tdBg&quot; width=&quot;200px&quot;&gt;角色名称：&lt;/td&gt;</span><br><span class="line">           &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;rolename&quot;/&gt;&lt;/td&gt;</span><br><span class="line">       &lt;/tr&gt;</span><br><span class="line">       &lt;tr&gt;</span><br><span class="line">           &lt;td class=&quot;tdBg&quot; width=&quot;200px&quot;&gt;角色权限：&lt;/td&gt;</span><br><span class="line">           &lt;td&gt;</span><br><span class="line">           	&lt;!--$&#123;priv.key &#125; &lt;s:checkboxlist list=&quot;#privilegeMap&quot; name=&quot;privilegeIds&quot;&gt;&lt;/s:checkboxlist&gt; --&gt;</span><br><span class="line">           	&lt;c:forEach items=&quot;$&#123;privilegeMap&#125;&quot; var=&quot;priv&quot;&gt;</span><br><span class="line">           		&lt;input type=&quot;checkbox&quot; name=&quot;privilegeIds&quot; value=&quot;$&#123;priv.key&#125;&quot;&gt;$&#123;priv.value &#125;</span><br><span class="line">           	&lt;/c:forEach&gt;</span><br><span class="line">           &lt;/td&gt;</span><br><span class="line">       &lt;/tr&gt;</span><br><span class="line">       &lt;tr&gt;</span><br><span class="line">           &lt;td class=&quot;tdBg&quot; width=&quot;200px&quot;&gt;状态：&lt;/td&gt;</span><br><span class="line">           &lt;td&gt;</span><br><span class="line">           	&lt;input type=&quot;radio&quot; name=&quot;state&quot; value=&quot;1&quot;&gt;有效</span><br><span class="line">           	&lt;input type=&quot;radio&quot; name=&quot;state&quot; value=&quot;0&quot;&gt;无效</span><br><span class="line">           &lt;/td&gt;</span><br><span class="line">       &lt;/tr&gt;</span><br><span class="line">   &lt;/table&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="最后的save"><a href="#最后的save" class="headerlink" title="最后的save"></a>最后的save</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 保存新增</span><br><span class="line">@RequestMapping(&quot;/role/add&quot;)</span><br><span class="line">public String add(Role role,String[] privilegeIds) &#123;</span><br><span class="line">		//生成UUid</span><br><span class="line">		UUID uuid = UUID.randomUUID();</span><br><span class="line">		String id = uuid.toString();</span><br><span class="line">		String replace = id.replace(&quot;-&quot;, &quot;&quot;);</span><br><span class="line">		role.setroleid(replace);</span><br><span class="line">		//保存角色</span><br><span class="line">		roleServiceImpl.save(role);</span><br><span class="line">		</span><br><span class="line">		//如果该权限数组不为空 则循环添加</span><br><span class="line">		if(privilegeIds != null &amp;&amp; !privilegeIds.equals(&quot;[]&quot;))&#123;</span><br><span class="line">			for (int i = 0; i &lt; privilegeIds.length; i++) &#123;</span><br><span class="line">				//循环添加该角色权限</span><br><span class="line">				roleServiceImpl.saveRolePrivilege(role.getroleid(),privilegeIds[i]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	return &quot;redirect:/role/listUI&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>将权限循环添加到数据库去</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/08/03/角色权限管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-MyBatis如何实现分页" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/09/MyBatis如何实现分页/">MyBatis如何实现分页</a>
+      <a class="archive-article-title" href="/2019/08/03/角色权限管理/">角色权限管理</a>
     </h1>
   
 
-        
-        <a href="/2019/07/09/MyBatis如何实现分页/" class="archive-article-date">
-  	<time datetime="2019-07-09T12:30:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="MyBatis四种分页方式"><a href="#MyBatis四种分页方式" class="headerlink" title="MyBatis四种分页方式"></a><font color="#00ffff">MyBatis四种分页方式</font></h2><h2 id="数据分页"><a href="#数据分页" class="headerlink" title="数据分页"></a>数据分页</h2><p>查询出全部数据，然后再list中截取需要的部分。<br>mybatis接口<br><code>List&lt;Student&gt; queryStudentsByArray();</code><br>xml配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;queryStudentsByArray&quot;  resultMap=&quot;studentmapper&quot;&gt;</span><br><span class="line">       select * from student</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+        <div class="article-info info-on-right">
+          
+          
 
-<p>service</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">接口</span><br><span class="line">List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize);</span><br><span class="line">实现接口</span><br><span class="line"> @Override</span><br><span class="line">    public List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize) &#123;</span><br><span class="line">        //查询全部数据</span><br><span class="line">        List&lt;Student&gt; students = studentMapper.queryStudentsByArray();</span><br><span class="line">        //从第几条数据开始</span><br><span class="line">        int firstIndex = (currPage - 1) * pageSize;</span><br><span class="line">        //到第几条数据结束</span><br><span class="line">        int lastIndex = currPage * pageSize;</span><br><span class="line">        return students.subList(firstIndex, lastIndex); //直接在list中截取</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>controller</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@ResponseBody</span><br><span class="line">    @RequestMapping(&quot;/student/array/&#123;currPage&#125;/&#123;pageSize&#125;&quot;)</span><br><span class="line">    public List&lt;Student&gt; getStudentByArray(@PathVariable(&quot;currPage&quot;) int currPage, @PathVariable(&quot;pageSize&quot;) int pageSize) &#123;</span><br><span class="line">        List&lt;Student&gt; student = StuServiceIml.queryStudentsByArray(currPage, pageSize);</span><br><span class="line">        return student;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="sql分页"><a href="#sql分页" class="headerlink" title="sql分页"></a>sql分页</h2><p>通过SQL语句带入响应的分页条件进行分页</p>
-<h2 id="拦截器分页"><a href="#拦截器分页" class="headerlink" title="拦截器分页"></a>拦截器分页</h2><p>创建拦截器，拦截mybatis接口方法id以ByPage结束的语句</p>
-<h2 id="RowBounds分页"><a href="#RowBounds分页" class="headerlink" title="RowBounds分页"></a>RowBounds分页</h2><p>数据量小时，RowBounds不失为一种好办法。但是数据量大时，实现拦截器就很有必要了。mybatis接口加入RowBounds参数</p>
-<p>详细请见—&gt;<a href="https://www.cnblogs.com/aeolian/p/9229149.html" target="_blank" rel="noopener">mybatis的四种分页</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/09/MyBatis如何实现分页/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
-    <article id="post-SSM框架工作原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
+    </div></section>
+  
+
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/09/SSM框架工作原理/">SSM框架工作原理及执行流程</a>
-    </h1>
-  
-
-        
-        <a href="/2019/07/09/SSM框架工作原理/" class="archive-article-date">
-  	<time datetime="2019-07-09T08:03:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>1.SSM框架工作原理</strong></p>
-<p>(1) Spring:<br>&emsp;&emsp;平时开发接触最多的估计就是IOC容器，它可以装载bean(也就是Java中的类，当然也包括service dao里面的) ,有了这个机制，就不用在每次使用这个类的时候为他初始化，很少看到关键字new，Spring的AOP，事务管理等等。<br>(2) SpringMVC:<br>&emsp;&emsp;1) 客户端发送请求到DispacherServlet(分发器);<br>&emsp;&emsp;2) 由DispacherServlet控制器查询HanderMapping，找到处理请求的Controller;<br>&emsp;&emsp;3) Controller调用业务逻辑处理后，返回ModelAndView;<br>&emsp;&emsp;4) DispacherServlet查询视图解析器，找到ModelAndView指定的视图;<br>&emsp;&emsp;5) 视图负责将结果显示到客户端。<br>(3) MyBatis:<br>&emsp;&emsp;mybatis是对jdbc的封装，它让数据库底层操作变得透明，mybatis的操作都是围绕一个sqlSessionFactory实例展开的，mybatis通过配置文件关联到各实体类的Mapper文件，Maooer文件中配置了每个类对数据库所需进行的sql语句映射，在每次与数据库交互时，通过sqlSessionFactory拿到一个sqlSession，再执行sql命令。</p>
-<p><strong>2.SSM框架执行流程</strong></p>
-<p><img src="https://img.xianjichina.com/editer/20181105/image/0756d2b472814a035a185408f0da9fcc.png" alt="执行流程"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">原理及流程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/07/09/SSM框架工作原理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-  
 
 
           </div>
@@ -415,9 +210,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
