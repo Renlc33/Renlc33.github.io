@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>MyBatis如何实现分页 | 小天的博客</title>
+  <title>编写过滤器 | 小天的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
+  <meta name="description" content="创建过滤器类首先创建一个过滤器类，实现Filter 实现该接口的方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051package cn.itcast.core.filter;import java.io.IOException;import javax.se">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MyBatis如何实现分页">
-<meta property="og:url" content="http://yoursite.com/2019/07/09/MyBatis如何实现分页/index.html">
+<meta property="og:title" content="编写过滤器">
+<meta property="og:url" content="http://yoursite.com/2019/08/09/编写一个过滤器/index.html">
 <meta property="og:site_name" content="小天的博客">
-<meta property="og:description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
+<meta property="og:description" content="创建过滤器类首先创建一个过滤器类，实现Filter 实现该接口的方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051package cn.itcast.core.filter;import java.io.IOException;import javax.se">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-09T12:53:46.435Z">
+<meta property="og:updated_time" content="2019-08-09T09:00:53.278Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MyBatis如何实现分页">
-<meta name="twitter:description" content="MyBatis四种分页方式数据分页查询出全部数据，然后再list中截取需要的部分。mybatis接口List&amp;lt;Student&amp;gt; queryStudentsByArray();xml配置文件 123&amp;lt;select id=&amp;quot;queryStudentsByArray&amp;quot;  resultMap=&amp;quot;studentmapper&amp;quot;&amp;gt;       se">
+<meta name="twitter:title" content="编写过滤器">
+<meta name="twitter:description" content="创建过滤器类首先创建一个过滤器类，实现Filter 实现该接口的方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051package cn.itcast.core.filter;import java.io.IOException;import javax.se">
   
     <link rel="alternative" href="/atom.xml" title="小天的博客" type="application/atom+xml">
   
@@ -150,39 +150,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-MyBatis如何实现分页" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-编写一个过滤器" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      MyBatis如何实现分页
+      编写过滤器
     </h1>
   
 
         
-        <a href="/2019/07/09/MyBatis如何实现分页/" class="archive-article-date">
-  	<time datetime="2019-07-09T12:30:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-09</time>
+        <a href="/2019/08/09/编写一个过滤器/" class="archive-article-date">
+  	<time datetime="2019-08-09T08:47:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="MyBatis四种分页方式"><a href="#MyBatis四种分页方式" class="headerlink" title="MyBatis四种分页方式"></a><font color="#00ffff">MyBatis四种分页方式</font></h2><h2 id="数据分页"><a href="#数据分页" class="headerlink" title="数据分页"></a>数据分页</h2><p>查询出全部数据，然后再list中截取需要的部分。<br>mybatis接口<br><code>List&lt;Student&gt; queryStudentsByArray();</code><br>xml配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=&quot;queryStudentsByArray&quot;  resultMap=&quot;studentmapper&quot;&gt;</span><br><span class="line">       select * from student</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+        <h3 id="创建过滤器类"><a href="#创建过滤器类" class="headerlink" title="创建过滤器类"></a>创建过滤器类</h3><p>首先创建一个过滤器类，实现Filter 实现该接口的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">package cn.itcast.core.filter;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">import javax.servlet.Filter;</span><br><span class="line">import javax.servlet.FilterChain;</span><br><span class="line">import javax.servlet.FilterConfig;</span><br><span class="line">import javax.servlet.ServletException;</span><br><span class="line">import javax.servlet.ServletRequest;</span><br><span class="line">import javax.servlet.ServletResponse;</span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line">import javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line">import cn.itcast.common.pojo.Constant;</span><br><span class="line"></span><br><span class="line">public class LoginFilter implements Filter &#123;</span><br><span class="line"></span><br><span class="line">	//初始化操作</span><br><span class="line">	@Override</span><br><span class="line">	public void init(FilterConfig filterConfig) throws ServletException &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	@Override</span><br><span class="line">	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)</span><br><span class="line">			throws IOException, ServletException &#123;</span><br><span class="line">		//接口是不能实例化的，因为接口中的方法没有方法体（只有方法的名字）所以需要强转</span><br><span class="line">		 HttpServletRequest req =  (HttpServletRequest) request;</span><br><span class="line">		 HttpServletResponse res = (HttpServletResponse) response;</span><br><span class="line">		 //uri 和url 的区别 url 带有 域名端口号</span><br><span class="line">		 String uri = req.getRequestURI();</span><br><span class="line">		 //判断当前求求是否为登录的请求地址</span><br><span class="line">		 if(!uri.contains(&quot;sys/login&quot;))&#123;</span><br><span class="line">			 //非登录请求</span><br><span class="line">			 if(req.getSession().getAttribute(Constant.USER) != null)&#123;</span><br><span class="line">				 //说明已经登录过，放行</span><br><span class="line">				 chain.doFilter(req, res);</span><br><span class="line">			 &#125;else&#123;</span><br><span class="line">				 //没有登录，跳转到登录页面</span><br><span class="line">				 res.sendRedirect(req.getContextPath()+&quot;/sys/loginUI.action&quot;);</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;else&#123;</span><br><span class="line">			 //登录请求</span><br><span class="line">			 chain.doFilter(req, res);</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	//这个方法用来销毁Filter对象，在web服务器停止后会销毁这个对象。</span><br><span class="line">	@Override</span><br><span class="line">	public void destroy() &#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>service</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">接口</span><br><span class="line">List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize);</span><br><span class="line">实现接口</span><br><span class="line"> @Override</span><br><span class="line">    public List&lt;Student&gt; queryStudentsByArray(int currPage, int pageSize) &#123;</span><br><span class="line">        //查询全部数据</span><br><span class="line">        List&lt;Student&gt; students = studentMapper.queryStudentsByArray();</span><br><span class="line">        //从第几条数据开始</span><br><span class="line">        int firstIndex = (currPage - 1) * pageSize;</span><br><span class="line">        //到第几条数据结束</span><br><span class="line">        int lastIndex = currPage * pageSize;</span><br><span class="line">        return students.subList(firstIndex, lastIndex); //直接在list中截取</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在web-xml中加入配置"><a href="#在web-xml中加入配置" class="headerlink" title="在web.xml中加入配置"></a>在web.xml中加入配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">	&lt;!-- 登录请求过滤器 --&gt;</span><br><span class="line">	&lt;filter&gt;</span><br><span class="line">&lt;!-- 过滤器名称 --&gt;</span><br><span class="line">		&lt;filter-name&gt;loginFilter&lt;/filter-name&gt;</span><br><span class="line">&lt;!-- 过滤器类的位置 --&gt;</span><br><span class="line">		&lt;filter-class&gt;cn.itcast.core.filter.LoginFilter&lt;/filter-class&gt;</span><br><span class="line">	&lt;/filter&gt;</span><br><span class="line">	&lt;filter-mapping&gt;</span><br><span class="line">&lt;!-- 过滤器名称 --&gt;</span><br><span class="line">		&lt;filter-name&gt;loginFilter&lt;/filter-name&gt;</span><br><span class="line">&lt;!-- 过滤所有.action结尾的请求 --&gt;</span><br><span class="line">		&lt;url-pattern&gt;*.action&lt;/url-pattern&gt;</span><br><span class="line">	&lt;/filter-mapping&gt;</span><br></pre></td></tr></table></figure>
 
-<p>controller</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@ResponseBody</span><br><span class="line">    @RequestMapping(&quot;/student/array/&#123;currPage&#125;/&#123;pageSize&#125;&quot;)</span><br><span class="line">    public List&lt;Student&gt; getStudentByArray(@PathVariable(&quot;currPage&quot;) int currPage, @PathVariable(&quot;pageSize&quot;) int pageSize) &#123;</span><br><span class="line">        List&lt;Student&gt; student = StuServiceIml.queryStudentsByArray(currPage, pageSize);</span><br><span class="line">        return student;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="sql分页"><a href="#sql分页" class="headerlink" title="sql分页"></a>sql分页</h2><p>通过SQL语句带入响应的分页条件进行分页</p>
-<h2 id="拦截器分页"><a href="#拦截器分页" class="headerlink" title="拦截器分页"></a>拦截器分页</h2><p>创建拦截器，拦截mybatis接口方法id以ByPage结束的语句</p>
-<h2 id="RowBounds分页"><a href="#RowBounds分页" class="headerlink" title="RowBounds分页"></a>RowBounds分页</h2><p>数据量小时，RowBounds不失为一种好办法。但是数据量大时，实现拦截器就很有必要了。mybatis接口加入RowBounds参数</p>
-<p>详细请见—&gt;<a href="https://www.cnblogs.com/aeolian/p/9229149.html" target="_blank" rel="noopener">mybatis的四种分页</a></p>
 
       
 
@@ -241,7 +233,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/07/09/MyBatis如何实现分页/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/09/编写一个过滤器/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -255,18 +247,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/03/角色权限管理/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          角色权限管理
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/07/09/SSM框架工作原理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">SSM框架工作原理及执行流程</div>
+    <a href="/2019/08/03/角色权限管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">角色权限管理</div>
       <i class="icon-circle-right"></i>
     </a>
   
